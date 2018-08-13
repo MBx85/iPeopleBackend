@@ -7,4 +7,7 @@ public class IPeopleKIM {
 		this.kim = kim;		
 	}
 	
+	public String getKIM() {
+		return kim;
+	}
 }

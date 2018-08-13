@@ -1,1 +1,5 @@
+application\TestController.class
+application\IPeopleKIMController.class
+application\IPeopleKIM.class
 application\Application.class
+application\RequestSender.class
