@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class IPeopleKIMController {
 	
-
 	@RequestMapping(value = "/IPeopleKIM/{kim}", method = RequestMethod.GET)
 	/*public void TestSendRequest(@PathVariable("kim") String kim) {
 
