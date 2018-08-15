@@ -9,9 +9,9 @@ public class KIMDataFileReader {
 	private static final String filepath = "datasource\\Kimdata.csv"; // in Properties File auslagern?
 	private static final String bufferFilePath = "datasource\\KimdataBuffer.csv";
 	private static final String csvDivider = ";";
+	
 
 	static void PutIntoFile(IPeopleKIM kimObj) {
-
 		try {
 			FileReader fileReader = new FileReader(filepath);
 			BufferedReader bufferedReader = new BufferedReader(fileReader); // Always wrap FileReader in BufferedReader.
@@ -23,24 +23,25 @@ public class KIMDataFileReader {
 				if (!IsHeaderLine) // because header line should not be read
 				{
 					String[] values = line.split(csvDivider);
-					String tempKim = values[CSVSupporter.GetAttributeCSVArrayPos("kim")];
-					if (tempKim.equals(kim)) {
+					String csvKim = values[CSVSupporter.GetAttributeCSVArrayPos("kim")];
+					if (csvKim.equals(kim)) {
 						/* überschreibe die Zeile im CSV */
+						bufferWriter.write(WriteCSVLine(kimObj) + "\r\n");
 						KimInserted = true;
 					} else {
 						bufferWriter.write(line + "\r\n");
-						/* füge als letzte Zeile an */
+						/* schreibe die Zeile ins File, da InputKIM!=csvKIM */
 					}
 				} else {
 					bufferWriter.write(line + "\r\n");
 					IsHeaderLine = false; // set during first iteration
 				}
 			}
-			
-			if(!KimInserted) {
-				
+
+			if (!KimInserted) {
+				/* Append InputKIM to CSV */
+				bufferWriter.write(WriteCSVLine(kimObj) + "\r\n");
 			}
-			
 			bufferedReader.close();
 			bufferWriter.close();
 			RenameAndCleanUpFiles(filepath, bufferFilePath);
@@ -52,12 +53,19 @@ public class KIMDataFileReader {
 	private static void RenameAndCleanUpFiles(String PathDataFile, String PathBufferFile) {
 		File bufferFile = new File(PathBufferFile);
 		File dataFile = new File(PathDataFile);
+		dataFile.delete();
 		bufferFile.renameTo(dataFile);
-		try {
-			FileWriter CleanUpper = new FileWriter(PathBufferFile);
-			CleanUpper.write("");
-			CleanUpper.close();
-		} catch (Exception e) {
-		}
+	}
+
+	private static String WriteCSVLine(IPeopleKIM kimObj) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(kimObj.getKIM());
+		sb.append(csvDivider);
+		sb.append(kimObj.getVorname());
+		sb.append(csvDivider);
+		sb.append(kimObj.getNachname());
+		sb.append(csvDivider);
+		// sb.append(kimObj.get) Geburtstag
+		return sb.toString();
 	}
 }

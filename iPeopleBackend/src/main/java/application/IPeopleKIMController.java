@@ -21,10 +21,12 @@ public class IPeopleKIMController {
 		return kim;
 	}
 	
-	@CrossOrigin(origins = "http://localhost:8092")
+	@CrossOrigin(origins = "http://localhost:8091")
 	@PutMapping("/IPeopleKIM/{kim}")
 	public void PutKIM(@PathVariable String kim, @RequestBody IPeopleKIM input) {
-		log.info("PUT REQUEST RECEIVED: Nachname: " + input.getNachname() + " , Vorname: " + input.getVorname());
+		log.info("PUT REQUEST RECEIVED --- KIM: " + input.getKIM() + ", Nachname: " 
+	+ input.getNachname() + " , Vorname: " + input.getVorname());
+		KIMDataFileReader.PutIntoFile(input);
 	}
 	
 }
