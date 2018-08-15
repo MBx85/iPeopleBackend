@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 import org.springframework.web.client.RestTemplate;
 
 public class RequestSender {
-	//private final static String testKIM = "322";
+	
 	private final static String targetURL = "http://localhost:8080/KIM/";
 	private final static Logger log = Logger.getLogger( RequestSender.class.getName());
 	
@@ -15,9 +15,10 @@ public class RequestSender {
 	}
 	
 	public void PutKIM() {
+		/* this will be changed, kein PUT in anderes system*/
 		log.info("LogInfo: KIM " + kim + " sent");
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.put(targetURL+kim, new IPeopleKIM(kim));
+		/*RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(targetURL+kim, new IPeopleKIM(kim));*/
 		//restTemplate.
 	}
 }
