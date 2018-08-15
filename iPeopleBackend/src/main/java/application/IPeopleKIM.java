@@ -1,9 +1,12 @@
 package application;
 
+import java.util.Date;
+
 public class IPeopleKIM {
 	private String kim;
 	private String vorname;
 	private String nachname;
+	private Date saveDate;
 
 	IPeopleKIM() {
 	}
@@ -24,6 +27,10 @@ public class IPeopleKIM {
 		return vorname;
 	}
 
+	public Date getSaveDate() {
+		return saveDate;
+	}
+	
 	public void setKIM(String kim) {
 		this.kim = kim;
 	}
@@ -34,5 +41,9 @@ public class IPeopleKIM {
 
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
+	}
+		
+	public void setSaveDate(Date date) {
+		this.saveDate = date;
 	}
 }
