@@ -1,18 +1,21 @@
-package application;
+package application.csvStuff;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
-public class KIMDataFileReader {
-	private static final String filepath = "datasource\\Kimdata.csv"; // in Properties File auslagern?
-	private static final String bufferFilePath = "datasource\\KimdataBuffer.csv";
-	private static final String csvDivider = ";";
-	
+import application.IPeopleKIM;
 
-	static void PutIntoFile(IPeopleKIM kimObj) {
+public class KIMDataFileReader extends GeneralDataFileReader{
+	private static final String FilePathProperty = "kim.datasource";
+	private static final String BufferFilePathProperty = "kimbuffer.datasource";
+		
+
+	public static void PutIntoFile(IPeopleKIM kimObj) {
 		try {
+			filepath = SetFilePathFromProperty(FilePathProperty);
+			final String bufferFilePath = SetFilePathFromProperty(BufferFilePathProperty);
 			FileReader fileReader = new FileReader(filepath);
 			BufferedReader bufferedReader = new BufferedReader(fileReader); // Always wrap FileReader in BufferedReader.
 			String line = null, kim = kimObj.getKIM();
@@ -67,5 +70,22 @@ public class KIMDataFileReader {
 		sb.append(csvDivider);
 		// sb.append(kimObj.get) Geburtstag
 		return sb.toString();
+	}
+	
+	static String GetUnunsedKIM(){
+		/*write all current kims in array
+		 * create random kim
+		 * check if kim is in array
+		 * --> if yes --> check again
+		 * --> if no --> return kim
+		 */
+		
+		filepath = SetFilePathFromProperty(FilePathProperty);
+		try {
+		FileReader fileReader = new FileReader(filepath);
+		fileReader.close();
+		}
+		catch(Exception e) {}
+		return "";
 	}
 }

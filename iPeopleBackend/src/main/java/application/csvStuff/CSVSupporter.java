@@ -1,6 +1,8 @@
-package application;
+package application.csvStuff;
 
 import java.util.HashMap;
+
+import application.AttributeOrderMap;
 
 public class CSVSupporter {
 	static int GetAttributeCSVArrayPos(String attribute) {

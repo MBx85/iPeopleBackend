@@ -1,8 +1,9 @@
 C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\Application.java
 C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\IPeopleKIMController.java
 C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\RequestSender.java
-C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\KIMDataFileReader.java
+C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\csvStuff\CSVSupporter.java
 C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\AttributeOrderMap.java
-C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\CSVSupporter.java
+C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\csvStuff\KIMDataFileReader.java
 C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\IPeopleKIM.java
 C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\TestController.java
+C:\Users\Markus\Git\iPeopleBackend\iPeopleBackend\src\main\java\application\csvStuff\GeneralDataFileReader.java

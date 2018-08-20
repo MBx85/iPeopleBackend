@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import application.csvStuff.KIMDataFileReader;
+
 @RestController
 public class IPeopleKIMController {
 	
 	private static final Logger log = Logger.getLogger( IPeopleKIMController.class.getName() );
 
-	@GetMapping("/IPeopleKIM/{kim}")
+	@GetMapping("/IPeopleKIM/{kim}") // currently not in use?
 	public String TestReturn(@PathVariable("kim") String kim) {
 		RequestSender RS = new RequestSender(kim);
 		RS.PutKIM();
@@ -27,6 +29,11 @@ public class IPeopleKIMController {
 		log.info("PUT REQUEST RECEIVED --- KIM: " + input.getKIM() + ", Nachname: " 
 	+ input.getNachname() + " , Vorname: " + input.getVorname());
 		KIMDataFileReader.PutIntoFile(input);
+	}
+	
+	@GetMapping("/IPeopleKIM/newKim") 
+	public IPeopleKIM GetNewKim() {
+		return new IPeopleKIM("");
 	}
 	
 }
