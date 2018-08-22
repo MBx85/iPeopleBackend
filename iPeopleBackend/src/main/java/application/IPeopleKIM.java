@@ -2,10 +2,14 @@ package application;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class IPeopleKIM {
 	private String kim;
 	private String vorname;
 	private String nachname;
+	private Date geburtstag;
 	private Date saveDate;
 
 	IPeopleKIM() {
@@ -27,10 +31,14 @@ public class IPeopleKIM {
 		return vorname;
 	}
 
+	public Date getGeburtstag() {
+		return geburtstag;
+	}
+
 	public Date getSaveDate() {
 		return saveDate;
 	}
-	
+
 	public void setKIM(String kim) {
 		this.kim = kim;
 	}
@@ -42,7 +50,11 @@ public class IPeopleKIM {
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
 	}
-		
+
+	public void setGeburtstag(Date geburtstag) {
+			this.geburtstag = geburtstag;
+	}
+
 	public void setSaveDate(Date date) {
 		this.saveDate = date;
 	}

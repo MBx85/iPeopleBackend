@@ -1,7 +1,6 @@
 package application;
 
 import java.util.logging.Logger;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,9 +30,12 @@ public class IPeopleKIMController {
 		KIMDataFileReader.PutIntoFile(input);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:8091")
 	@GetMapping("/IPeopleKIM/newKim") 
 	public IPeopleKIM GetNewKim() {
-		return new IPeopleKIM("");
+		String ReturnKIM = KIMDataFileReader.GetUnunsedKIM();
+		log.info("Unused KIM " + ReturnKIM + " returned");
+		return new IPeopleKIM(ReturnKIM); // works but returns whole KIM Object :-(
 	}
 	
 }

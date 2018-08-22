@@ -4,20 +4,23 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Logger;
+import application.Application;
 import application.IPeopleKIM;
 
-public class KIMDataFileReader extends GeneralDataFileReader{
+public class KIMDataFileReader extends GeneralDataFileReader {
 	private static final String FilePathProperty = "kim.datasource";
 	private static final String BufferFilePathProperty = "kimbuffer.datasource";
-		
+	private static final Logger log = Logger.getLogger(KIMDataFileReader.class.getName());
 
 	public static void PutIntoFile(IPeopleKIM kimObj) {
 		try {
 			filepath = SetFilePathFromProperty(FilePathProperty);
 			final String bufferFilePath = SetFilePathFromProperty(BufferFilePathProperty);
-			FileReader fileReader = new FileReader(filepath);
-			BufferedReader bufferedReader = new BufferedReader(fileReader); // Always wrap FileReader in BufferedReader.
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath)); // Always wrap FileReader in
+																							// BufferedReader.
 			String line = null, kim = kimObj.getKIM();
 			boolean IsHeaderLine = true, KimInserted = false;
 			FileWriter bufferWriter = new FileWriter(bufferFilePath);
@@ -26,8 +29,7 @@ public class KIMDataFileReader extends GeneralDataFileReader{
 				if (!IsHeaderLine) // because header line should not be read
 				{
 					String[] values = line.split(csvDivider);
-					String csvKim = values[CSVSupporter.GetAttributeCSVArrayPos("kim")];
-					if (csvKim.equals(kim)) {
+					if (values[0].equals(kim)) {// Kim ist die erste Spalte
 						/* überschreibe die Zeile im CSV */
 						bufferWriter.write(WriteCSVLine(kimObj) + "\r\n");
 						KimInserted = true;
@@ -49,8 +51,8 @@ public class KIMDataFileReader extends GeneralDataFileReader{
 			bufferWriter.close();
 			RenameAndCleanUpFiles(filepath, bufferFilePath);
 		} catch (Exception e) {
+			log.info("Exception caught during file writing: " + e.getMessage());
 		}
-
 	}
 
 	private static void RenameAndCleanUpFiles(String PathDataFile, String PathBufferFile) {
@@ -68,24 +70,50 @@ public class KIMDataFileReader extends GeneralDataFileReader{
 		sb.append(csvDivider);
 		sb.append(kimObj.getNachname());
 		sb.append(csvDivider);
-		// sb.append(kimObj.get) Geburtstag
+		sb.append(Application.DateOnlyFormatter.format(kimObj.getGeburtstag()));
+		sb.append(csvDivider);
+		sb.append(Application.DateTimeFormatter.format(new Date())); // saveDate
 		return sb.toString();
 	}
-	
-	static String GetUnunsedKIM(){
-		/*write all current kims in array
-		 * create random kim
-		 * check if kim is in array
-		 * --> if yes --> check again
-		 * --> if no --> return kim
+
+	public static String GetUnunsedKIM() {
+		/*
+		 * write all current kims in array create random kim check if kim is in array
+		 * --> if yes --> check again --> if no --> return kim
 		 */
-		
 		filepath = SetFilePathFromProperty(FilePathProperty);
+		FileReaderSupporter frs = new FileReaderSupporter(filepath);
+		ArrayList<String> kimArray = new ArrayList<String>();
+
 		try {
-		FileReader fileReader = new FileReader(filepath);
-		fileReader.close();
+			while (((frs.line = frs.bufferedReader.readLine()) != null)) {
+				if (!frs.IsHeaderLine) // because header line should not be read
+				{
+					String[] values = frs.line.split(csvDivider);
+					kimArray.add(values[0]); // add kim of current line to array
+				} else
+					frs.IsHeaderLine = false; // set during first iteration
+			}
+			frs.bufferedReader.close();
+		} catch (Exception e) {
 		}
-		catch(Exception e) {}
-		return "";
+
+		String newKim = "";
+		boolean KimAlreadyPresent = false;
+
+		do {
+			newKim = String.format("%06d", Integer.parseInt((new Integer((int) (Math.random() * 1E6))).toString()));
+			// 6stellige, zufällige int als Kim, linksseitig aufgefüllt mit Nullen
+			if (KimAlreadyPresent)
+				KimAlreadyPresent = false;
+			for (String s : kimArray) {
+				if (s.equals(newKim)) {
+					KimAlreadyPresent = true;
+					continue;
+				}
+			}
+		} while (KimAlreadyPresent);
+
+		return newKim; // ToDo: left padding with zeros
 	}
 }

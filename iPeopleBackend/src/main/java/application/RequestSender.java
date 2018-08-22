@@ -1,7 +1,6 @@
 package application;
 
 import java.util.logging.Logger;
-import org.springframework.web.client.RestTemplate;
 
 public class RequestSender {
 	
