@@ -12,10 +12,10 @@ public class IPeopleKIM {
 	private Date geburtstag;
 	private Date saveDate;
 
-	IPeopleKIM() {
+	public IPeopleKIM() {
 	}
 
-	IPeopleKIM(String kim) {
+	public IPeopleKIM(String kim) {
 		this.kim = kim;
 	}
 

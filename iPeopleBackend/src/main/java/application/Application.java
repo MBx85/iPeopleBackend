@@ -10,7 +10,10 @@ public class Application {
 	private static String DateTimeFormat = "dd.MM.yyyy HH:mm:ss.SSS";
 	private static String DateOnlyFormat = "dd.MM.yyyy";
 	public static SimpleDateFormat DateTimeFormatter = new SimpleDateFormat(DateTimeFormat); 
-	public static SimpleDateFormat DateOnlyFormatter = new SimpleDateFormat(DateOnlyFormat); 
+	public static SimpleDateFormat DateOnlyFormatter = new SimpleDateFormat(DateOnlyFormat);
+	public static String GetDateTimeFormat() {
+		return DateTimeFormat;
+	}
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

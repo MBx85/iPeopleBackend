@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -114,6 +115,31 @@ public class KIMDataFileReader extends GeneralDataFileReader {
 			}
 		} while (KimAlreadyPresent);
 
-		return newKim; // ToDo: left padding with zeros
+		return newKim;
+	}
+
+	public static ArrayList<IPeopleKIM> GetRefreshedKIMSinceDate(Date inputDate) {
+		filepath = SetFilePathFromProperty(FilePathProperty);
+		FileReaderSupporter frs = new FileReaderSupporter(filepath);
+		SimpleDateFormat sdf = new SimpleDateFormat(Application.GetDateTimeFormat());
+		ArrayList<IPeopleKIM> kimList = new ArrayList<IPeopleKIM>();
+
+		try {
+			while (((frs.line = frs.bufferedReader.readLine()) != null)) {
+				if (!frs.IsHeaderLine) // because header line should not be read
+				{
+					String[] values = frs.line.split(csvDivider);
+					if (sdf.parse(values[4]).before(inputDate)) // values[4] is saveDate in csv
+					{
+						IPeopleKIM kim = new IPeopleKIM(values[0]);
+						kimList.add(kim);
+					}
+				} else
+					frs.IsHeaderLine = false;
+			}
+		} catch (Exception e) {
+		}
+
+		return kimList;
 	}
 }

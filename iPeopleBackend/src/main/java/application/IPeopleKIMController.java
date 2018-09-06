@@ -1,19 +1,27 @@
 package application;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import application.csvStuff.KIMDataFileReader;
 
 @RestController
 public class IPeopleKIMController {
-	
-	private static final Logger log = Logger.getLogger( IPeopleKIMController.class.getName() );
+
+	private static final Logger log = Logger.getLogger(IPeopleKIMController.class.getName());
 
 	@GetMapping("/IPeopleKIM/{kim}") // currently not in use?
 	public String TestReturn(@PathVariable("kim") String kim) {
@@ -21,21 +29,32 @@ public class IPeopleKIMController {
 		RS.PutKIM();
 		return kim;
 	}
-	
+
 	@CrossOrigin(origins = "http://localhost:8091")
 	@PutMapping("/IPeopleKIM/{kim}")
 	public void PutKIM(@PathVariable String kim, @RequestBody IPeopleKIM input) {
-		log.info("PUT REQUEST RECEIVED --- KIM: " + input.getKIM() + ", Nachname: " 
-	+ input.getNachname() + " , Vorname: " + input.getVorname());
+		log.info("PUT REQUEST RECEIVED --- KIM: " + input.getKIM() + ", Nachname: " + input.getNachname()
+				+ " , Vorname: " + input.getVorname());
 		KIMDataFileReader.PutIntoFile(input);
 	}
-	
+
 	@CrossOrigin(origins = "http://localhost:8091")
-	@GetMapping("/IPeopleKIM/newKim") 
+	@GetMapping("/IPeopleKIM/newKim")
 	public IPeopleKIM GetNewKim() {
 		String ReturnKIM = KIMDataFileReader.GetUnunsedKIM();
 		log.info("Unused KIM " + ReturnKIM + " returned");
 		return new IPeopleKIM(ReturnKIM); // works but returns whole KIM Object :-(
 	}
-	
+
+	@CrossOrigin(origins = "http://localhost:8091")
+	@GetMapping("/IPeopleKIM/ChangedKims")
+	public /*List<IPeopleKIM>*/ ResponseEntity<List<IPeopleKIM>> getRefreshedKims(@RequestParam(value = "date", required = true) String inputDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		try {
+			Date date = sdf.parse(inputDate);
+			return new ResponseEntity<List<IPeopleKIM>>(KIMDataFileReader.GetRefreshedKIMSinceDate(date), HttpStatus.OK);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+	}
 }
