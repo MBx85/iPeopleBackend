@@ -10,12 +10,35 @@ import java.util.Date;
 import java.util.logging.Logger;
 import application.Application;
 import application.IPeopleKIM;
+import application.csvStuff.FileReaderSupporter;
 
 public class KIMDataFileReader extends GeneralDataFileReader {
 	private static final String FilePathProperty = "kim.datasource";
 	private static final String BufferFilePathProperty = "kimbuffer.datasource";
 	private static final Logger log = Logger.getLogger(KIMDataFileReader.class.getName());
+	
+	public static IPeopleKIM GetKimFromFile(String kim) {
+		IPeopleKIM kimObject = new IPeopleKIM();
+		try {
+			filepath = SetFilePathFromProperty(FilePathProperty);
+			FileReaderSupporter frs = new FileReaderSupporter(filepath);
 
+			while (((frs.line = frs.bufferedReader.readLine()) != null)) {
+				if (!frs.IsHeaderLine) // because header line should not be read
+				{
+					String[] values = frs.line.split(csvDivider);
+					if (values[0].equals(kim)) {
+						kimObject = WriteKimAttrsFromCsvStringArray(values);
+					}
+				} else
+					frs.IsHeaderLine = false; // set during first iteration
+			}
+			frs.bufferedReader.close();
+		} catch (Exception e) {
+		}
+		return kimObject;
+	}
+	
 	public static void PutIntoFile(IPeopleKIM kimObj) {
 		try {
 			filepath = SetFilePathFromProperty(FilePathProperty);
@@ -56,6 +79,14 @@ public class KIMDataFileReader extends GeneralDataFileReader {
 		}
 	}
 
+	private static IPeopleKIM WriteKimAttrsFromCsvStringArray(String[] arr) {
+		IPeopleKIM kimObject = new IPeopleKIM();
+		kimObject.setKIM(arr[0]);
+		kimObject.setVorname(arr[1]);
+		kimObject.setNachname(arr[2]);
+		return kimObject;
+	}
+	
 	private static void RenameAndCleanUpFiles(String PathDataFile, String PathBufferFile) {
 		File bufferFile = new File(PathBufferFile);
 		File dataFile = new File(PathDataFile);
@@ -129,7 +160,7 @@ public class KIMDataFileReader extends GeneralDataFileReader {
 				if (!frs.IsHeaderLine) // because header line should not be read
 				{
 					String[] values = frs.line.split(csvDivider);
-					if (sdf.parse(values[4]).before(inputDate)) // values[4] is saveDate in csv
+					if (sdf.parse(values[4]).after(inputDate)) // values[4] is saveDate in csv
 					{
 						IPeopleKIM kim = new IPeopleKIM(values[0]);
 						kimList.add(kim);
@@ -139,7 +170,6 @@ public class KIMDataFileReader extends GeneralDataFileReader {
 			}
 		} catch (Exception e) {
 		}
-
 		return kimList;
 	}
 }
