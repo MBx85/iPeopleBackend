@@ -33,7 +33,7 @@ public class IPeopleKIMController {
 	@PutMapping("/IPeopleKIM/{kim}")
 	public void PutKIM(@PathVariable String kim, @RequestBody IPeopleKIM input) {
 		log.info("PUT REQUEST RECEIVED --- KIM: " + input.getKIM() + ", Nachname: " + input.getNachname()
-				+ " , Vorname: " + input.getVorname());
+				+ " , Vorname: " + input.getVorname() + " ");
 		KIMDataFileReader.PutIntoFile(input);
 	}
 

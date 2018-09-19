@@ -102,7 +102,7 @@ public class KIMDataFileReader extends GeneralDataFileReader {
 		sb.append(csvDivider);
 		sb.append(kimObj.getNachname());
 		sb.append(csvDivider);
-		sb.append(Application.DateOnlyFormatter.format(kimObj.getGeburtstag()));
+		//sb.append(Application.DateOnlyFormatter.format(kimObj.getGeburtstag()));
 		sb.append(csvDivider);
 		sb.append(Application.DateTimeFormatter.format(new Date())); // saveDate
 		return sb.toString();
